@@ -195,7 +195,6 @@ export const DashboardScreen: React.FC = () => {
             width={screenWidth}
             height={150}
             hideDataPoints={false}
-            minValue={0}
             dataPointsRadius={4}
             dataPointsColor={COLORS.primary}
             color={COLORS.primary}
