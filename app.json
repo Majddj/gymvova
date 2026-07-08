@@ -1,15 +1,18 @@
 {
   "expo": {
-    "name": "GymVova",
+    "name": "GYM Check",
     "slug": "gym-vova",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/splash.png",
+
+    "backgroundColor": "#000000",
+    
     "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0F0F0F"
+      "backgroundColor": "#000000"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
