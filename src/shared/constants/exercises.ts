@@ -1,0 +1,60 @@
+import { Exercise } from '../../features/exercises/types';
+
+export const DEFAULT_EXERCISES: Exercise[] = [
+  {
+    id: 'pushups',
+    type: 'pushups',
+    name: 'Отжимания',
+    icon: 'fitness',
+    unit: 'reps',
+    isCustom: false,
+  },
+  {
+    id: 'pullups',
+    type: 'pullups',
+    name: 'Подтягивания',
+    icon: 'body',
+    unit: 'reps',
+    isCustom: false,
+  },
+  {
+    id: 'squats',
+    type: 'squats',
+    name: 'Приседания',
+    icon: 'walk',
+    unit: 'reps',
+    isCustom: false,
+  },
+  {
+    id: 'situps',
+    type: 'situps',
+    name: 'Пресс',
+    icon: 'man',
+    unit: 'reps',
+    isCustom: false,
+  },
+  {
+    id: 'dips',
+    type: 'dips',
+    name: 'Отжимания на брусьях',
+    icon: 'barbell',
+    unit: 'reps',
+    isCustom: false,
+  },
+  {
+    id: 'plank',
+    type: 'plank',
+    name: 'Планка',
+    icon: 'timer',
+    unit: 'seconds',
+    isCustom: false,
+  },
+  {
+    id: 'lunges',
+    type: 'lunges',
+    name: 'Выпады',
+    icon: 'footsteps',
+    unit: 'reps',
+    isCustom: false,
+  },
+];
