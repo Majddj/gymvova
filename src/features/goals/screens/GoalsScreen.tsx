@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Alert, Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Screen } from '../../../shared/components/layout/Screen';
 import { Button } from '../../../shared/components/ui/Button';
@@ -34,6 +34,13 @@ export const GoalsScreen: React.FC = () => {
       handleAddGoal(exerciseId, exerciseName, exerciseIcon, targetReps, period);
     }
   };
+
+  const goalsText = "🎯 Мой прогресс по целям:\n\n" + 
+  goals.map((goal) => {
+    const { total, percentage } = getProgressForGoal(goal);
+    return `💪 ${goal.exerciseName}: ${Math.round(percentage)}% (${total} из ${goal.targetReps} повт.)`;
+  }).join('\n');
+
 
   return (
     <Screen>
