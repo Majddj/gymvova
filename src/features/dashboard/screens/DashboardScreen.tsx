@@ -11,6 +11,7 @@ import { useGoals } from '../../goals/hooks/useGoals';
 import { Exercise } from '../../exercises/types';
 import { formatDate, getTodayString, getPeriodRange } from '../../../shared/utils/dateUtils';
 import { COLORS, SPACING, FONT_SIZE, FONT_WEIGHT, BORDER_RADIUS } from '../../../shared/constants/theme';
+import Sharing from '../../../features/sharing';
 
 export const DashboardScreen: React.FC = () => {
   const { exercises, logs, todayLogs, handleAddLog, handleEditLog, handleDeleteLog } = useExercises();
@@ -132,20 +133,76 @@ export const DashboardScreen: React.FC = () => {
     ]);
   };
 
+
+const exerciseStats: { [key: string]: { reps: number; sets: number } } = {};
+
+// 2. Группируем все сегодняшние логи
+todayLogs.forEach((log) => {
+  const name = log.exerciseName;
+  const reps = Number(log.reps) || 0;
+  const sets = Number(log.sets) || 0;
+
+  if (!exerciseStats[name]) {
+    exerciseStats[name] = { reps: 0, sets: 0 };
+  }
+  
+  // Плюсуем подходы и повторения для этого упражнения
+  exerciseStats[name].reps += reps;
+  exerciseStats[name].sets += sets;
+});
+
+// 3. Формируем итоговый текст отчета
+let shareText = "🎯 Мой спортивный отчет на сегодня:\n\n";
+
+// Добавляем цели, если они есть
+if (activeGoals && activeGoals.length > 0) {
+  shareText += "🔥 Прогресс по целям:\n";
+  activeGoals.forEach((goal) => {
+    const { total, percentage } = getProgressForGoal(goal);
+    shareText += `• ${goal.exerciseName}: ${Math.round(percentage)}% (${total}/${goal.targetReps} повт.)\n`;
+
+
+
+    if (total > goal.targetReps) {
+      shareText += `🥳 Ты перевыполнил цель! (на +${total - goal.targetReps} повт.)\n`;
+    }
+  });
+  
+  shareText += "\n";
+
+}
+
+// Добавляем детализацию по конкретным упражнениям
+shareText += "📊 Сделано сегодня по упражнениям:\n";
+
+const exerciseNames = Object.keys(exerciseStats);
+
+if (exerciseNames.length > 0) {
+  exerciseNames.forEach((name) => {
+    const stats = exerciseStats[name];
+    // Будет выводить: • Подтягивания: 10 подх. (50 повт.)
+    shareText += `• ${name}: ${stats.sets} подх. (${stats.reps} повт.)\n`;
+  });
+} else {
+  shareText += "• Пока нет записей за сегодня\n";
+}
+
+shareText += "\nТренюсь каждый день! 💪🚀";
+
+
   return (
     <Screen>
       {/* Header */}
       <View style={styles.header}>
         <View>
           <Text style={styles.logo}>VOVA</Text>
-          <Text style={styles.greeting}>Привет, Атлет! 💪</Text>
           <Text style={styles.date}>{formatDate(getTodayString())}</Text>
         </View>
-        <View style={styles.streakBadge}>
-          <Ionicons name="flame" size={18} color={COLORS.warning} />
-          <Text style={styles.streakText}>{new Set(todayLogs.map((l) => l.date)).size > 0 ? '🔥' : '—'}</Text>
+          <View style={styles.sharing_wrapper}> 
+            <Ionicons name="flame" size={18} color={COLORS.warning} style={{padding: 5}} /> 
+            <Sharing message={shareText} /> 
+          </View>
         </View>
-      </View>
 
       {/* Today stats */}
       <View style={styles.statsRow}>
@@ -341,14 +398,25 @@ export const DashboardScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: SPACING.lg },
-  logo: { fontSize: FONT_SIZE.xl, fontWeight: FONT_WEIGHT.bold, color: COLORS.primary, marginBottom: SPACING.xs },
-  greeting: { fontSize: FONT_SIZE.xl, fontWeight: FONT_WEIGHT.bold, color: COLORS.text },
-  date: { fontSize: FONT_SIZE.sm, color: COLORS.textSecondary, marginTop: 2 },
-  streakBadge: {
-    flexDirection: 'row', alignItems: 'center', gap: 4,
-    backgroundColor: COLORS.surfaceLight, padding: SPACING.sm,
-    borderRadius: BORDER_RADIUS.full,
+  header: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'flex-start', 
+    marginBottom: SPACING.lg,
+  },
+  logo: { 
+    fontSize: FONT_SIZE.xxxl, 
+    fontWeight: FONT_WEIGHT.bold, 
+    color: COLORS.primary, 
+    marginBottom: SPACING.xs ,
+  },
+  date: { fontSize: FONT_SIZE.xs, color: COLORS.textSecondary, marginTop: 10, marginLeft: SPACING.xs },
+  sharing_wrapper: {
+      flexDirection: 'row',
+      backgroundColor: COLORS.border, 
+      borderRadius: BORDER_RADIUS.full,
+      padding: 2, 
+
   },
   streakText: { fontSize: FONT_SIZE.md, color: COLORS.text },
   statsRow: { flexDirection: 'row', gap: SPACING.sm, marginBottom: SPACING.lg },
