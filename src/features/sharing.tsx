@@ -1,6 +1,7 @@
 import { FONT_SIZE } from '@/shared/constants/theme'; 
 import React from 'react'; 
 import { StyleSheet, Text, View, Share, TouchableOpacity } from 'react-native'; 
+import { Ionicons } from '@expo/vector-icons'
 
 // Добавляем описание типов для TypeScript
 interface SharingProps {
@@ -24,7 +25,7 @@ export default function Sharing({ message }: SharingProps) {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onShare}>
-        <Text style={styles.shareBtnText}>Поделиться</Text>
+        <Ionicons  style={styles.Img} name="share-social" size={24} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -39,5 +40,9 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: 'white',
     padding: 2,
+  },
+  Img: {
+    zIndex: 1,
+    color: 'white'
   }
 });

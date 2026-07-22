@@ -199,7 +199,7 @@ shareText += "\nТренюсь каждый день! 💪🚀";
           <Text style={styles.date}>{formatDate(getTodayString())}</Text>
         </View>
           <View style={styles.sharing_wrapper}> 
-            <Ionicons name="flame" size={18} color={COLORS.warning} style={{padding: 5}} /> 
+            <Ionicons name="flame" size={20} color={COLORS.warning} style={{padding: 5}} /> 
             <Sharing message={shareText} /> 
           </View>
         </View>
