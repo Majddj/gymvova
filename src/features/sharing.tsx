@@ -1,7 +1,7 @@
 import { FONT_SIZE } from '@/shared/constants/theme'; 
 import React from 'react'; 
 import { StyleSheet, Text, View, Share, TouchableOpacity } from 'react-native'; 
-import { Ionicons } from '@expo/vector-icons'
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 // Добавляем описание типов для TypeScript
 interface SharingProps {
