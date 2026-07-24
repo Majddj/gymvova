@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Alert, Share } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Alert, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Screen } from '../../../shared/components/layout/Screen';
 import { Button } from '../../../shared/components/ui/Button';
@@ -17,12 +17,31 @@ export const GoalsScreen: React.FC = () => {
   const openAdd = () => { setEditingGoal(null); setModalVisible(true); };
   const openEdit = (goal: Goal) => { setEditingGoal(goal); setModalVisible(true); };
 
-  const confirmDelete = (goalId: string) => {
-    Alert.alert('Удалить цель?', 'Это действие нельзя отменить.', [
-      { text: 'Отмена', style: 'cancel' },
-      { text: 'Удалить', style: 'destructive', onPress: () => handleDeleteGoal(goalId) },
-    ]);
-  };
+const confirmDelete = (goalId: string) => {
+  if (Platform.OS === 'web') {
+    const confirmed = (globalThis as any).confirm(
+      'Удалить цель?\nЭто действие нельзя отменить.'
+    );
+
+    if (confirmed) {
+      handleDeleteGoal(goalId);
+    }
+
+    return;
+  }
+
+  Alert.alert('Удалить цель?', 'Это действие нельзя отменить.', [
+    {
+      text: 'Отмена',
+      style: 'cancel',
+    },
+    {
+      text: 'Удалить',
+      style: 'destructive',
+      onPress: () => handleDeleteGoal(goalId),
+    },
+  ]);
+};
 
   const handleSave = (
     exerciseId: string, exerciseName: string,
