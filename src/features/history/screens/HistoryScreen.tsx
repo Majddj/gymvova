@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, ScrollView, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, ScrollView, TextInput, Platform} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {
   addMonths,
@@ -12,8 +12,7 @@ import {
   parseISO,
   startOfMonth,
   startOfWeek,
-  subMonths,
-} from 'date-fns';
+  subMonths} from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { Screen } from '../../../shared/components/layout/Screen';
 import { Card } from '../../../shared/components/ui/Card';
@@ -98,12 +97,31 @@ export const HistoryScreen: React.FC = () => {
     handleSelectDate(format(next, 'yyyy-MM-dd'));
   };
 
-  const confirmDelete = (logId: string) => {
-    Alert.alert('Удалить запись?', 'Это действие нельзя отменить.', [
-      { text: 'Отмена', style: 'cancel' },
-      { text: 'Удалить', style: 'destructive', onPress: () => handleDeleteLog(logId) },
-    ]);
-  };
+const confirmDelete = (logId: string) => {
+  if (Platform.OS === 'web') {
+    const confirmed = globalThis.confirm(
+      'Удалить запись?\nЭто действие нельзя отменить.'
+    );
+
+    if (confirmed) {
+      handleDeleteLog(logId);
+    }
+
+    return;
+  }
+
+  Alert.alert('Удалить запись?', 'Это действие нельзя отменить.', [
+    {
+      text: 'Отмена',
+      style: 'cancel',
+    },
+    {
+      text: 'Удалить',
+      style: 'destructive',
+      onPress: () => handleDeleteLog(logId),
+    },
+  ]);
+};
 
   const getExercise = (exerciseId: string) =>
     exercises.find((e) => e.id === exerciseId) ?? null;

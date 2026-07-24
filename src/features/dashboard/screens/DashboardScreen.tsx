@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput, Dimensions, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LineChart } from 'react-native-gifted-charts';
 import { Screen } from '../../../shared/components/layout/Screen';
@@ -126,12 +126,31 @@ export const DashboardScreen: React.FC = () => {
     setInlineEditId(null);
   };
 
-  const confirmDelete = (logId: string) => {
-    Alert.alert('Удалить запись?', 'Это действие нельзя отменить.', [
-      { text: 'Отмена', style: 'cancel' },
-      { text: 'Удалить', style: 'destructive', onPress: () => handleDeleteLog(logId) },
-    ]);
-  };
+const confirmDelete = (logId: string) => {
+  if (Platform.OS === 'web') {
+    const confirmed = (globalThis as any).confirm(
+      'Удалить запись?\nЭто действие нельзя отменить.'
+    );
+
+    if (confirmed) {
+      handleDeleteLog(logId);
+    }
+
+    return;
+  }
+
+  Alert.alert('Удалить запись?', 'Это действие нельзя отменить.', [
+    {
+      text: 'Отмена',
+      style: 'cancel',
+    },
+    {
+      text: 'Удалить',
+      style: 'destructive',
+      onPress: () => handleDeleteLog(logId),
+    },
+  ]);
+};
 
 
 const exerciseStats: { [key: string]: { reps: number; sets: number } } = {};
