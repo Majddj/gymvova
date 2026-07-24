@@ -17,34 +17,20 @@ interface ScreenProps {
   contentStyle?: ViewStyle;
 }
 
-interface TelegramInsets {
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-}
-
-const EMPTY_INSETS: TelegramInsets = {
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0,
-};
-
-function getTelegramInsets(): TelegramInsets {
+const getTelegramInsets = () => {
   if (Platform.OS !== 'web') {
-    return EMPTY_INSETS;
+    return {
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+    };
   }
 
-  const telegram = (globalThis as any).Telegram?.WebApp;
+  const tg = (globalThis as any).Telegram?.WebApp;
 
-  if (!telegram) {
-    return EMPTY_INSETS;
-  }
-
-  const safeArea = telegram.safeAreaInset ?? EMPTY_INSETS;
-  const contentSafeArea =
-    telegram.contentSafeAreaInset ?? EMPTY_INSETS;
+  const safeArea = tg?.safeAreaInset ?? {};
+  const contentSafeArea = tg?.contentSafeAreaInset ?? {};
 
   return {
     top: Math.max(
@@ -64,7 +50,7 @@ function getTelegramInsets(): TelegramInsets {
       Number(contentSafeArea.right) || 0,
     ),
   };
-}
+};
 
 export const Screen: React.FC<ScreenProps> = ({
   children,
@@ -72,71 +58,66 @@ export const Screen: React.FC<ScreenProps> = ({
   style,
   contentStyle,
 }) => {
-  const [telegramInsets, setTelegramInsets] =
-    useState<TelegramInsets>(EMPTY_INSETS);
+  const [insets, setInsets] = useState(getTelegramInsets);
 
   useEffect(() => {
     if (Platform.OS !== 'web') {
       return;
     }
 
-    const telegram = (globalThis as any).Telegram?.WebApp;
+    const tg = (globalThis as any).Telegram?.WebApp;
 
-    if (!telegram) {
+    if (!tg) {
       return;
     }
 
     const updateInsets = () => {
-      setTelegramInsets(getTelegramInsets());
+      setInsets(getTelegramInsets());
     };
 
     updateInsets();
 
-    telegram.onEvent?.('safeAreaChanged', updateInsets);
-    telegram.onEvent?.('contentSafeAreaChanged', updateInsets);
-    telegram.onEvent?.('fullscreenChanged', updateInsets);
-    telegram.onEvent?.('viewportChanged', updateInsets);
+    tg.onEvent?.('safeAreaChanged', updateInsets);
+    tg.onEvent?.('contentSafeAreaChanged', updateInsets);
+    tg.onEvent?.('fullscreenChanged', updateInsets);
+    tg.onEvent?.('viewportChanged', updateInsets);
 
     return () => {
-      telegram.offEvent?.('safeAreaChanged', updateInsets);
-      telegram.offEvent?.('contentSafeAreaChanged', updateInsets);
-      telegram.offEvent?.('fullscreenChanged', updateInsets);
-      telegram.offEvent?.('viewportChanged', updateInsets);
+      tg.offEvent?.('safeAreaChanged', updateInsets);
+      tg.offEvent?.('contentSafeAreaChanged', updateInsets);
+      tg.offEvent?.('fullscreenChanged', updateInsets);
+      tg.offEvent?.('viewportChanged', updateInsets);
     };
   }, []);
 
-  const telegramPadding: ViewStyle | undefined =
+  const safeStyle: ViewStyle =
     Platform.OS === 'web'
       ? {
-          paddingTop: SPACING.md + telegramInsets.top,
-          paddingBottom: SPACING.xxl + telegramInsets.bottom,
-          paddingLeft: SPACING.md + telegramInsets.left,
-          paddingRight: SPACING.md + telegramInsets.right,
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
         }
-      : undefined;
-
-  const content = [
-    styles.content,
-    telegramPadding,
-    contentStyle,
-  ];
+      : {};
 
   return (
     <SafeAreaView
-      style={[styles.safe, style]}
+      style={[styles.safe, safeStyle, style]}
       edges={Platform.OS === 'web' ? [] : ['top']}
     >
       {scrollable ? (
         <ScrollView
           style={styles.scroll}
-          contentContainerStyle={content}
+          contentContainerStyle={[styles.content, contentStyle]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
           {children}
         </ScrollView>
       ) : (
-        <View style={content}>{children}</View>
+        <View style={[styles.content, contentStyle]}>
+          {children}
+        </View>
       )}
     </SafeAreaView>
   );
