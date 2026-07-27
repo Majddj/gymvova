@@ -132,7 +132,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: SPACING.md,
-    paddingBottom: SPACING.xxl,
+  padding: SPACING.md,
+
+  paddingBottom: 110,
   },
 });
