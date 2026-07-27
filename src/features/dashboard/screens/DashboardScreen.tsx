@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput, Dimensions, Platform } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { LineChart } from 'react-native-gifted-charts';
 import { Screen } from '../../../shared/components/layout/Screen';
 import { Card } from '../../../shared/components/ui/Card';
@@ -12,6 +12,7 @@ import { Exercise } from '../../exercises/types';
 import { formatDate, getTodayString, getPeriodRange } from '../../../shared/utils/dateUtils';
 import { COLORS, SPACING, FONT_SIZE, FONT_WEIGHT, BORDER_RADIUS } from '../../../shared/constants/theme';
 import Sharing from '../../../features/sharing';
+import { PdfExportButton } from '../../export/PdfExportButton';
 
 export const DashboardScreen: React.FC = () => {
   const { exercises, logs, todayLogs, handleAddLog, handleEditLog, handleDeleteLog } = useExercises();
@@ -215,13 +216,30 @@ shareText += "\nТренюсь каждый день! 💪🚀";
       <View style={styles.header}>
         <View>
           <Text style={styles.logo}>VOVA</Text>
-          <Text style={styles.date}>{formatDate(getTodayString())}</Text>
+          <Text style={styles.date}>
+            {formatDate(getTodayString())}
+          </Text>
         </View>
-          <View style={styles.sharing_wrapper}> 
-            <Ionicons name="flame" size={20} color={COLORS.warning} style={{padding: 5}} /> 
-            <Sharing message={shareText} /> 
+        
+        <View style={styles.sharing_wrapper}>
+          <Ionicons
+            name="flame"
+            size={20}
+            color={COLORS.warning}
+            style={{ padding: 5 }}
+          />
+      
+            <Sharing message={shareText} />
+
+          <View style={{padding: 3}}>
+            <PdfExportButton
+              logs={logs}
+              exercises={exercises}
+              goals={goals}
+            />
           </View>
         </View>
+      </View>
 
       {/* Today stats */}
       <View style={styles.statsRow}>
