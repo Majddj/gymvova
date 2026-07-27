@@ -134,6 +134,6 @@ const styles = StyleSheet.create({
   content: {
   padding: SPACING.md,
 
-  paddingBottom: 110,
+  paddingBottom: 130,
   },
 });
