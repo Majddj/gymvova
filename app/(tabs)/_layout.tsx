@@ -8,7 +8,6 @@ import { COLORS } from '../../src/shared/constants/theme';
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
 
-  const bottomOffset = Math.max(insets.bottom, 12);
 
   return (
     <Tabs
@@ -26,7 +25,7 @@ export default function TabsLayout() {
 
           left: 16,
           right: 16,
-          bottom: bottomOffset,
+          bottom: 5,
 
           height: 72,
           backgroundColor: COLORS.surface,
