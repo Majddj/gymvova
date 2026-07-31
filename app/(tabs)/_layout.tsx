@@ -2,7 +2,6 @@ import React from 'react';
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Platform } from 'react-native';
 
 import { COLORS } from '../../src/shared/constants/theme';
 
@@ -30,7 +29,7 @@ export default function TabsLayout() {
 
           left: 16,
           right: 16,
-          bottom: 12,
+          marginHorizontal: 12,
 
           height: 72,
           backgroundColor: COLORS.surface,
