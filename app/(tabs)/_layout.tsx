@@ -30,10 +30,7 @@ export default function TabsLayout() {
 
           left: 16,
           right: 16,
-          bottom:
-          Platform.OS === 'web'
-            ? 0
-            : Math.max(insets.bottom, 5),
+          bottom: 12,
 
           height: 72,
           backgroundColor: COLORS.surface,

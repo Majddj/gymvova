@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
   },
   content: {
   padding: SPACING.md,
-
-  paddingBottom: 130,
-  },
+  paddingBottom: Platform.OS === 'web' ? 44 : 80,
+},
 });
