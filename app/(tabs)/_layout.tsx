@@ -6,29 +6,20 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '../../src/shared/constants/theme';
 
 export default function TabsLayout() {
-  const insets = useSafeAreaInsets();
 
 
   return (
     <Tabs
-
-    safeAreaInsets={{
-      bottom: 0,
-    }}
       screenOptions={{
         headerShown: false,
 
         sceneStyle: {
-          backgroundColor: COLORS.background,
+          backgroundColor: 'red',
         },
 
         tabBarStyle: {
           position: 'absolute',
-
-        
-
-          left: 16,
-          right: 16,
+          bottom: 0,
           marginHorizontal: 12,
 
           height: 72,
@@ -60,7 +51,7 @@ export default function TabsLayout() {
         },
 
         tabBarLabelStyle: {
-          fontSize: 10,
+          fontSize: 9,
           marginBottom: 2,
         },
 
