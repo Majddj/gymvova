@@ -14,7 +14,7 @@ export default function TabsLayout() {
         headerShown: false,
 
         sceneStyle: {
-          backgroundColor: 'red',
+          backgroundColor: COLORS.background,
         },
 
         tabBarStyle: {
