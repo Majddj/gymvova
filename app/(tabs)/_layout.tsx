@@ -19,7 +19,7 @@ export default function TabsLayout() {
 
         tabBarStyle: {
           position: 'absolute',
-          bottom: 0,
+          bottom: 20,
           marginHorizontal: 12,
 
           height: 72,
