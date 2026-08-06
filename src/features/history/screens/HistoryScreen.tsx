@@ -128,7 +128,10 @@ const confirmDelete = (logId: string) => {
 
   return (
     <Screen>
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 300 }} 
+    >
         <Text style={styles.heading}>История</Text>
         <Text style={styles.sub}>{logs.length} всего записей</Text>
 
@@ -276,7 +279,6 @@ const confirmDelete = (logId: string) => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: { paddingBottom: SPACING.xxl },
   heading: { fontSize: FONT_SIZE.xxl, fontWeight: FONT_WEIGHT.bold, color: COLORS.text, marginBottom: SPACING.xs },
   sub: { fontSize: FONT_SIZE.sm, color: COLORS.textSecondary, marginBottom: SPACING.lg },
   navRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: SPACING.sm },

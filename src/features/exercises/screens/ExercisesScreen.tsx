@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 import { Screen } from '../../../shared/components/layout/Screen';
 import { ExerciseCard } from '../components/ExerciseCard';
@@ -57,6 +57,10 @@ export const ExercisesScreen: React.FC = () => {
   };
 
   return (
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 300 }} 
+    >
     <Screen>
       <Text style={styles.heading}>Упражнения</Text>
 
@@ -83,6 +87,7 @@ export const ExercisesScreen: React.FC = () => {
         onSave={handleSave}
       />
     </Screen>
+    </ScrollView>
   );
 };
 

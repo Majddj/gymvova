@@ -213,7 +213,7 @@ shareText += "\nТренюсь каждый день! 💪🚀";
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 120 }} 
+      contentContainerStyle={{ paddingBottom: 200 }} 
     >
     <Screen>
       {/* Header */}
