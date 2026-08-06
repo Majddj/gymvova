@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Alert, Platform } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Alert, Platform, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Screen } from '../../../shared/components/layout/Screen';
 import { Button } from '../../../shared/components/ui/Button';
@@ -63,6 +63,10 @@ const confirmDelete = (goalId: string) => {
 
   return (
     <Screen>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 300 }} 
+    >
       <View style={styles.titleRow}>
         <View>
           <Text style={styles.heading}>Мои цели</Text>
@@ -104,6 +108,7 @@ const confirmDelete = (goalId: string) => {
         onClose={() => setModalVisible(false)}
         onSave={handleSave}
       />
+      </ScrollView>
     </Screen>
   );
 };

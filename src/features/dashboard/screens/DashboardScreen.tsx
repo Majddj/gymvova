@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput, Dimensions, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput, Dimensions, Platform, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LineChart } from 'react-native-gifted-charts';
 import { Screen } from '../../../shared/components/layout/Screen';
@@ -13,6 +13,7 @@ import { formatDate, getTodayString, getPeriodRange } from '../../../shared/util
 import { COLORS, SPACING, FONT_SIZE, FONT_WEIGHT, BORDER_RADIUS } from '../../../shared/constants/theme';
 import Sharing from '../../../features/sharing';
 import { PdfExportButton } from '../../export/PdfExportButton';
+
 
 export const DashboardScreen: React.FC = () => {
   const { exercises, logs, todayLogs, handleAddLog, handleEditLog, handleDeleteLog } = useExercises();
@@ -219,7 +220,20 @@ shareText += "\nТренюсь каждый день! 💪🚀";
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.logo}>VOVA</Text>
+          <View>
+            <View style={styles.logo_wrapper}>
+              <Text style={styles.logo}>VOVA</Text>
+                <Image
+                   source={require('../../../../assets/logo.png')}
+                   style={{
+                     width: '50%',
+                     height: '50%',
+                     padding: 20
+                   }}
+                   resizeMode='cover'
+                 />
+               </View>
+          </View>
           <Text style={styles.date}>
             {formatDate(getTodayString())}
           </Text>
@@ -440,18 +454,20 @@ shareText += "\nТренюсь каждый день! 💪🚀";
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    alignItems: 'flex-start', 
-    marginBottom: SPACING.lg,
-  },
-  logo: { 
-    fontSize: FONT_SIZE.xxxl, 
-    fontWeight: FONT_WEIGHT.bold, 
-    color: COLORS.primary, 
-    marginBottom: SPACING.xs ,
-  },
+    header: {
+      flexDirection: 'row', 
+      justifyContent: 'space-between', 
+      alignItems: 'flex-start', 
+      marginBottom: SPACING.lg,
+    },
+    logo: {
+      fontSize: 30,
+      fontWeight: 600,
+      color: COLORS.primary
+    },
+      logo_wrapper: {
+      flexDirection: 'row', 
+    },
   date: { fontSize: FONT_SIZE.xs, color: COLORS.textSecondary, marginTop: 10, marginLeft: SPACING.xs },
   sharing_wrapper: {
       flexDirection: 'row',

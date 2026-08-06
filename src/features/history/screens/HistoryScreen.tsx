@@ -263,7 +263,6 @@ const confirmDelete = (logId: string) => {
             })}
           </View>
         )}
-      </ScrollView>
 
       <LogWorkoutModal
         visible={modalVisible}
@@ -274,6 +273,7 @@ const confirmDelete = (logId: string) => {
           if (editingLog) handleEditLog(editingLog, reps, sets, note, date);
         }}
       />
+      </ScrollView>
     </Screen>
   );
 };
