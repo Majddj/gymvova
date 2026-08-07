@@ -5,3 +5,11 @@
 expo-env.d.ts
 # @end expo-cli
 node_modules
+
+# Secrets
+.env
+.env.*
+bot/.env
+
+# Node
+node_modules/
