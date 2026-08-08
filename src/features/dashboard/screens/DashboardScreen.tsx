@@ -14,6 +14,8 @@ import { COLORS, SPACING, FONT_SIZE, FONT_WEIGHT, BORDER_RADIUS } from '../../..
 import Sharing from '../../../features/sharing';
 import { PdfExportButton } from '../../export/PdfExportButton';
 
+import { BackupButton } from '../../backup/BackupButton';
+
 
 export const DashboardScreen: React.FC = () => {
   const { exercises, logs, todayLogs, handleAddLog, handleEditLog, handleDeleteLog } = useExercises();
@@ -242,13 +244,15 @@ shareText += "\nТренюсь каждый день! 💪🚀";
         <View style={styles.sharing_wrapper}>
           <Ionicons
             name="flame"
-            size={20}
+            size={22}
             color={COLORS.warning}
-            style={{ padding: 5 }}
+            style={{ paddingLeft: 3, paddingVertical: 6 }}
           />
       
             <Sharing message={shareText} />
 
+            <BackupButton/>
+            
           <View style={{padding: 3}}>
             <PdfExportButton
               logs={logs}

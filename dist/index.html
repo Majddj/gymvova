@@ -5,7 +5,7 @@
 
 <meta
   name="viewport"
-  content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+  content="width=device-width,  initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
 />
 
     <meta name="theme-color" content="#0F0F0F" />
@@ -41,6 +41,57 @@
       href="./icon.png"
     />
 
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<script>
+  (() => {
+    const root = document.documentElement;
+    const tg = window.Telegram?.WebApp;
+
+    const updateViewport = () => {
+      let height;
+
+      if (tg?.initData) {
+        // Telegram
+        height =
+          tg.viewportStableHeight ||
+          tg.viewportHeight ||
+          window.innerHeight;
+
+        root.classList.add('telegram');
+      } else {
+        // Chrome / Safari / другие браузеры
+        height =
+          window.visualViewport?.height ||
+          window.innerHeight;
+
+        root.classList.remove('telegram');
+      }
+
+      root.style.setProperty(
+        '--app-height',
+        `${Math.round(height)}px`
+      );
+    };
+
+    if (tg?.initData) {
+      tg.ready();
+      tg.expand();
+
+      tg.onEvent?.('viewportChanged', updateViewport);
+    }
+
+    updateViewport();
+
+    window.addEventListener('resize', updateViewport);
+
+    window.visualViewport?.addEventListener(
+      'resize',
+      updateViewport
+    );
+  })();
+</script>
+
   </head>
 
  <style id="expo-reset">
@@ -50,24 +101,35 @@
     box-sizing: border-box;
   }
 
+  html,
+  body,
+  #root {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    background-color: #0f0f0f;
+  }
+
+  html,
   body {
+    height: var(--app-height, 100dvh);
     overflow: hidden;
   }
 
-  
-  html, body, #root {
+  #root {
     display: flex;
-    background-color: #0f0f0f;
+
     width: 100%;
-    height: 102%;
-    margin: 0;
-    padding: 0;
+    height: var(--app-height, 100dvh);
+
+    overflow: hidden;
   }
 </style>
 
   <body>
     <noscript>Для приложения требуется JavaScript.</noscript>
     <div id="root"></div>
-  <script src="/gymvova/_expo/static/js/web/entry-fdd015623481e9e4f356d0d5d380e08b.js" defer></script>
+  <script src="/gymvova/_expo/static/js/web/entry-2ee9b2ff5469300dcdb9e45bbf0b1da6.js" defer></script>
 </body>
 </html>
