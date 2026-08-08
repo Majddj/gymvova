@@ -14,7 +14,9 @@ import { COLORS, SPACING, FONT_SIZE, FONT_WEIGHT, BORDER_RADIUS } from '../../..
 import Sharing from '../../../features/sharing';
 import { PdfExportButton } from '../../export/PdfExportButton';
 
+/* Export/Import data app */
 import { BackupButton } from '../../backup/BackupButton';
+import { ImportBackupButton } from '../../backup/ImportBackupButton';
 
 
 export const DashboardScreen: React.FC = () => {
@@ -246,14 +248,15 @@ shareText += "\nТренюсь каждый день! 💪🚀";
             name="flame"
             size={22}
             color={COLORS.warning}
-            style={{ paddingLeft: 3, paddingVertical: 6 }}
+            style={{ paddingLeft: 3, paddingVertical: 10 }}
           />
       
             <Sharing message={shareText} />
 
             <BackupButton/>
+            <ImportBackupButton/>
             
-          <View style={{padding: 3}}>
+          <View style={{marginVertical: 10, marginHorizontal: 10}}>
             <PdfExportButton
               logs={logs}
               exercises={exercises}
@@ -477,7 +480,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       backgroundColor: COLORS.border, 
       borderRadius: BORDER_RADIUS.full,
-      padding: 2, 
+      padding: 1, 
 
   },
   streakText: { fontSize: FONT_SIZE.md, color: COLORS.text },

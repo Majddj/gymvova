@@ -33,11 +33,11 @@ export default function Sharing({ message }: SharingProps) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5,
     marginHorizontal: 5,
+    paddingVertical: 10,
   },
   shareBtnText: {
-    fontSize: 17,
+    fontSize: 22,
     color: 'white',
     padding: 2,
   },
