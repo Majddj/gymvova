@@ -118,4 +118,18 @@ export default function TabsLayout() {
       />
     </Tabs>
   );
+  <Tabs.Screen
+  name="backup"
+  options={{
+    title: 'Backup',
+
+    tabBarIcon: ({ color }) => (
+      <Ionicons
+        name="cloud-outline"
+        size={24}
+        color={color}
+      />
+    ),
+  }}
+/>
 }

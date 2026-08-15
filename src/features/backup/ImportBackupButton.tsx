@@ -1,99 +1,101 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
-  Alert,
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
-import * as Clipboard from 'expo-clipboard';
 
 import { importBackup } from './importBackup';
 import { COLORS } from '../../shared/constants/theme';
 
 export const ImportBackupButton = () => {
-  const handleImport = async (): Promise<void> => {
-    try {
-      // Берём backup прямо из буфера обмена
-      const backupText =
-        await Clipboard.getStringAsync();
+  const [status, setStatus] =
+    useState('');
 
-      if (!backupText) {
-        Alert.alert(
-          'Ошибка',
-          'Сначала скопируй backup.'
+  const handleImport =
+    async (): Promise<void> => {
+      try {
+        setStatus('');
+
+        const result =
+          await importBackup();
+
+        if (!result) {
+          return;
+        }
+
+        setStatus(
+          `Готово! Тренировок: ${result.logsAdded}, упражнений: ${result.exercisesAdded}, целей: ${result.goalsAdded}`
+        );
+      } catch (error) {
+        console.error(
+          'Ошибка импорта:',
+          error
         );
 
-        return;
+        setStatus(
+          error instanceof Error
+            ? `Ошибка: ${error.message}`
+            : 'Ошибка импорта'
+        );
       }
-
-      // Передаём backup в функцию восстановления
-      const result =
-        await importBackup(backupText);
-
-      Alert.alert(
-        'Готово',
-        `Восстановлено:
-
-Тренировок: ${result.logsAdded}
-Упражнений: ${result.exercisesAdded}
-Целей: ${result.goalsAdded}`
-      );
-    } catch (error) {
-      console.error(
-        'Ошибка восстановления:',
-        error
-      );
-
-      Alert.alert(
-        'Ошибка',
-        error instanceof Error
-          ? error.message
-          : 'Не удалось восстановить backup'
-      );
-    }
-  };
+    };
 
   return (
-    <TouchableOpacity
-      style={styles.button}
-      onPress={handleImport}
-      activeOpacity={0.8}
-    >
-      <Ionicons
-        name="cloud-upload-outline"
-        size={19}
-        color={COLORS.primary}
-      />
-    </TouchableOpacity>
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.iconButton}
+        onPress={handleImport}
+        activeOpacity={0.7}
+      >
+        <Ionicons
+          name="cloud-upload-outline"
+          size={22}
+          color={COLORS.primary}
+        />
+      </TouchableOpacity>
+
+      {status !== '' && (
+        <Text style={styles.status}>
+          {status}
+        </Text>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: COLORS.surface,
+  container: {
+    alignItems: 'center',
+  },
+
+  iconButton: {
+    width: 42,
+    height: 42,
+
+    borderRadius: 10,
+
+    marginVertical: 5,
+    marginHorizontal: 3,
 
     borderWidth: 1,
     borderColor: COLORS.primary,
-    borderRadius: 10,
 
-    marginHorizontal: 4,
+    backgroundColor: COLORS.surface,
 
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-
-    gap: 8,
   },
 
-  text: {
-    color: COLORS.primary,
-    fontSize: 14,
-    fontWeight: '600',
+  status: {
+    marginTop: 8,
+
+    color: COLORS.text,
+
+    fontSize: 12,
   },
 });

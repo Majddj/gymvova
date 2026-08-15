@@ -20,6 +20,8 @@ import type {
   Goal,
 } from '../goals/types';
 
+import * as DocumentPicker from 'expo-document-picker';
+
 
 interface VovaGymBackup {
   app: 'vova-gym';
@@ -69,29 +71,51 @@ const isValidBackup = (
 
 
 export const importBackup = async (
-  backupText: string
-): Promise<ImportBackupResult> => {
+): Promise<ImportBackupResult | null> => {
 
-  const text = backupText.trim();
+  const result =
+    await DocumentPicker.getDocumentAsync({
+      type: 'application/json',
+      multiple: false,
+    });
 
-  if (!text) {
+  if (result.canceled) {
+    return null;
+  }
+
+  const asset = result.assets[0];
+
+  let text: string;
+
+  // Web / Telegram WebView
+  if (
+    asset.file &&
+    typeof asset.file.text === 'function'
+  ) {
+    text = await asset.file.text();
+  } else {
+    // Если File недоступен — читаем через URI
+    const response =
+      await fetch(asset.uri);
+
+    text = await response.text();
+  }
+
+  if (!text.trim()) {
     throw new Error(
-      'Вставь резервную копию'
+      'Выбранный backup пуст'
     );
   }
 
-
   let backup: unknown;
-
 
   try {
     backup = JSON.parse(text);
   } catch {
     throw new Error(
-      'Резервная копия повреждена'
+      'Файл повреждён или не является JSON'
     );
   }
-
 
   if (!isValidBackup(backup)) {
     throw new Error(
@@ -99,54 +123,35 @@ export const importBackup = async (
     );
   }
 
-
   const currentState =
     store.getState();
 
-
   const missingExercises =
     backup.data.exercises.exercises.filter(
-      (exercise) => {
-        return !currentState
-          .exercises
-          .exercises
-          .some(
-            (currentExercise) =>
-              currentExercise.id ===
-              exercise.id
-          );
-      }
+      (exercise) =>
+        !currentState.exercises.exercises.some(
+          (currentExercise) =>
+            currentExercise.id === exercise.id
+        )
     );
-
 
   const missingLogs =
     backup.data.exercises.logs.filter(
-      (log) => {
-        return !currentState
-          .exercises
-          .logs
-          .some(
-            (currentLog) =>
-              currentLog.id === log.id
-          );
-      }
+      (log) =>
+        !currentState.exercises.logs.some(
+          (currentLog) =>
+            currentLog.id === log.id
+        )
     );
-
 
   const missingGoals =
     backup.data.goals.goals.filter(
-      (goal) => {
-        return !currentState
-          .goals
-          .goals
-          .some(
-            (currentGoal) =>
-              currentGoal.id ===
-              goal.id
-          );
-      }
+      (goal) =>
+        !currentState.goals.goals.some(
+          (currentGoal) =>
+            currentGoal.id === goal.id
+        )
     );
-
 
   store.dispatch(
     mergeExercisesBackup({
@@ -155,16 +160,13 @@ export const importBackup = async (
     })
   );
 
-
   store.dispatch(
     mergeGoalsBackup({
       goals: missingGoals,
     })
   );
 
-
   await persistor.flush();
-
 
   return {
     exercisesAdded:
