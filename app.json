@@ -25,9 +25,7 @@
       },
       "package": "com.gymvova.app"
     },
-    "plugins": [
-      "expo-router"
-    ],
+    "plugins": [],
     "scheme": "gymvova",
     "experiments": {
       "typedRoutes": true
